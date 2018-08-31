@@ -1,20 +1,21 @@
 #!/bin/bash
 
 echo "[c1p worker job] invoked copado job from vcosquico repository"
+printenv
 
 notify_status "Running" "20" 
 sleep 10s
 
-notify_status "40" "40"  
+notify_status "Running..." "40"  
 sleep 10s
 
-notify_status "60" "60" 
+notify_status "Running......" "60" 
 sleep 10s
 
-notify_status "80" "80" 
+notify_status "Running........." "80" 
 sleep 10s
 
-notify_status "100" "100" 
+notify_status "Copado rulez" "100" 
 sleep 10s
 
 echo "[c1p worker job] done! success"
