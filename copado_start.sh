@@ -2,19 +2,19 @@
 
 echo "[c1p worker job] invoked copado job from vcosquico repository"
 
-notify_status "20" "a"
+notify_status "running" "20"
 sleep 10s
 
-notify_status "40" "b"
+notify_status "running" "40"
 sleep 10s
 
-notify_status "60" "c"
+notify_status "running" "60"
 sleep 10s
 
-notify_status "80" "d"
+notify_status "running" "80"
 sleep 10s
 
-notify_status "100" "e"
+notify_status "running" "100"
 sleep 10s
 
 echo "[c1p worker job] done! success"
