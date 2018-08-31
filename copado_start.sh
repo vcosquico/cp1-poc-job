@@ -1,6 +1,20 @@
 #!/bin/bash
 
 echo "[c1p worker job] invoked copado job from vcosquico repository"
-echo "[c1p worker job] Processing something for...30 seconds"
-sleep 30s
+
+notify_status "Running" "20%"
+sleep 10s
+
+notify_status "Running" "40%"
+sleep 10s
+
+notify_status "Running" "60%"
+sleep 10s
+
+notify_status "Running" "80%"
+sleep 10s
+
+notify_status "Running" "100%"
+sleep 10s
+
 echo "[c1p worker job] done! success"
