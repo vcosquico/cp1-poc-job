@@ -14,7 +14,7 @@ sleep 10s
 notify_status "all your base are belong to us" "80"
 sleep 10s
 
-notify_status "pikachu rulez" "100"
+notify_status "copado rulez" "100"
 sleep 10s
 
 echo "[c1p worker job] done! success"
