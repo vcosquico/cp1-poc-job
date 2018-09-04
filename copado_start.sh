@@ -4,10 +4,6 @@ echo "[c1p worker job] invoked copado job from vcosquico repository"
 printenv
 
 notify_status "Retrieving_data" "20" 
-echo "Retrieving data ${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+name,+StageName+from+opportunity"
-curl "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+name,+StageName+from+opportunity" \
--H 'Authorization: Bearer 00D1t000000Eo4i!ARAAQA9Bx7zWKliNpxT1afs4ll_KeOcVjEDn4Qy853uVo6rDJ815RTu_VJM7Cfvwm.nrTrFr4GebKq.9JoWQKtiTW3LeamFN'
-
 curl "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+name,+StageName+from+opportunity" \
 -H 'Authorization: Bearer 00D1t000000Eo4i!ARAAQA9Bx7zWKliNpxT1afs4ll_KeOcVjEDn4Qy853uVo6rDJ815RTu_VJM7Cfvwm.nrTrFr4GebKq.9JoWQKtiTW3LeamFN' \
 | jq -c -r '.records[] | [.Name, .StageName] | @csv' > opportunities.csv
