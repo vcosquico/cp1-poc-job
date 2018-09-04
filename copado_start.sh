@@ -5,11 +5,9 @@ printenv
 
 notify_status "Retrieving_data" "20" 
 echo "Retrieving data"
-ping https://copado-1-platform-dev-01-dev-ed.my.salesforce.com
-curl https://copado-1-platform-dev-01-dev-ed.my.salesforce.com/services/data/v20.0/query\?\
-q\=SELECT+name,+StageName+from+opportunity -H "Authorization: Bearer 00D1t000000Eo4i\!ARAAQA9Bx7zWKliNpxT1afs4ll_KeOcVjEDn\
-4Qy853uVo6rDJ815RTu_VJM7Cfvwm.nrTrFr4GebKq.9JoWQKtiTW3LeamFN" | jq -c -r '.records[] | [.Name, .StageName] | @csv' > \
-opportunities.csv
+curl "$COPADO_SF_SERVICE_ENDPOINT/query\?q\=SELECT+name,+StageName+from+opportunity" \
+-H "Authorization: Bearer 00D1t000000Eo4i\!ARAAQA9Bx7zWKliNpxT1afs4ll_KeOcVjEDn4Qy853uVo6rDJ815RTu_VJM7Cfvwm.nrTrFr4GebKq.9JoWQKtiTW3LeamFN" \
+| jq -c -r '.records[] | [.Name, .StageName] | @csv' > opportunities.csv
 sleep 2s
 
 notify_status "Compressing_data" "40"
