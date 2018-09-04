@@ -4,10 +4,16 @@ echo "[c1p worker job] invoked copado job from vcosquico repository"
 printenv
 
 notify_status "Retrieving data" "20" 
-curl https://copado-1-platform-dev-01-dev-ed.my.salesforce.com/services/data/v20.0/query\?q\=SELECT+name,+StageName+from+opportunity -H "Authorization: Bearer 00D1t000000Eo4i\!ARAAQA9Bx7zWKliNpxT1afs4ll_KeOcVjEDn4Qy853uVo6rDJ815RTu_VJM7Cfvwm.nrTrFr4GebKq.9JoWQKtiTW3LeamFN" | jq -c -r '.records[] | [.Name, .StageName] | @csv' > opportunities.csv
+echo "Retrieving data"
+ping https://copado-1-platform-dev-01-dev-ed.my.salesforce.com
+curl https://copado-1-platform-dev-01-dev-ed.my.salesforce.com/services/data/v20.0/query\?\
+q\=SELECT+name,+StageName+from+opportunity -H "Authorization: Bearer 00D1t000000Eo4i\!ARAAQA9Bx7zWKliNpxT1afs4ll_KeOcVjEDn\
+4Qy853uVo6rDJ815RTu_VJM7Cfvwm.nrTrFr4GebKq.9JoWQKtiTW3LeamFN" | jq -c -r '.records[] | [.Name, .StageName] | @csv' > \
+opportunities.csv
 sleep 2s
 
-notify_status "Compressing data" "40"  
+notify_status "Compressing data" "40"
+echo "Compressing data"
 zip --password copado opportinities.zip opportunities.csv
 sleep 2s
 
