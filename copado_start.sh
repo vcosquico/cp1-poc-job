@@ -15,7 +15,6 @@ zip --password copado opportinities.zip opportunities.csv
 sleep 2s
 
 notify_status "Uploading_data" "60" 
-echo "$FTP_USER:$FTP_PWD $FTP_URL/opportunities-$(date +%s).csv"
 curl -T opportunities.csv -u "$FTP_USER":"$FTP_PWD" "$FTP_URL/opportunities-$(date +%s).csv"
 sleep 2s
 
