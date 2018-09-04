@@ -5,7 +5,7 @@ printenv
 
 notify_status "Retrieving_data" "20" 
 curl "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+name,+StageName+from+opportunity" \
--H 'Authorization: Bearer 00D1t000000Eo4i!ARAAQA9Bx7zWKliNpxT1afs4ll_KeOcVjEDn4Qy853uVo6rDJ815RTu_VJM7Cfvwm.nrTrFr4GebKq.9JoWQKtiTW3LeamFN' \
+-H 'Authorization: Bearer $COPADO_SF_AUTH_HEADER' \
 | jq -c -r '.records[] | [.Name, .StageName] | @csv' > opportunities.csv
 sleep 2s
 
