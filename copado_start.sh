@@ -11,7 +11,7 @@ sleep 2s
 
 notify_status "Compressing_data" "40"
 echo "Compressing data"
-zip --password copado opportinities.zip opportunities.csv
+zip --password copado opportunities.zip opportunities.csv
 sleep 2s
 
 notify_status "Uploading_data" "60" 
