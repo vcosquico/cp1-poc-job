@@ -30,7 +30,7 @@ echo "Uploading GDrive data"
 curl -sS -XPOST --data 'grant_type=refresh_token&client_id=864421843858-g6b3ngvrpg8p9j2kt03rv0l0h0kteuhn.apps.googleusercontent.com&client_secret=pUvKreCL4nLnYAaj_xmGyGa9&refresh_token=1/24qD4kf0lU-91tfazVp161zPCDkrwtX5PrQD4jh0q4tWM7WCt5xWfSfTcLTfYUnX' "https://accounts.google.com/o/oauth2/token" | jq -cr '.access_token' > ./.drive_token
 cat ./.drive_token
 #curl -sS -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=media&name=opportunities$(date +%s).zip" -H "Content-Type: application/zip, application/octet-stream" -H "Authorization: Bearer $(cat ./.drive_token)" -d@opportunities.zip
-curl -sS -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart" -H "Content-Type: application/zip, application/octet-stream" -H "Authorization: Bearer $(cat ./.drive_token)" -F "file=@opportunities.zip;type=application/zip" -F "metadata={name : 'opportunities.zip'};type=application/json;charset=UTF-8"
+curl -sS -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart" -H "Authorization: Bearer $(cat ./.drive_token)" -F "file=@opportunities.zip;type=application/zip" -F "metadata={name : 'opportunities.zip'};type=application/json;charset=UTF-8"
 
 notify_status "Copado_rulez" "100" 
 echo "Finish"
