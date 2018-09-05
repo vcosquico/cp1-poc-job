@@ -31,7 +31,7 @@ echo "Uploading GDrive data"
 curl -sS -XPOST --data 'grant_type=refresh_token&client_id=864421843858-g6b3ngvrpg8p9j2kt03rv0l0h0kteuhn.apps.googleusercontent.com&client_secret=pUvKreCL4nLnYAaj_xmGyGa9&refresh_token=1/24qD4kf0lU-91tfazVp161zPCDkrwtX5PrQD4jh0q4tWM7WCt5xWfSfTcLTfYUnX' "https://accounts.google.com/o/oauth2/token" | jq -cr '.access_token' > ./.drive_token
 cat ./.drive_token
 # put file metadata
-curl -sD - -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet" -H "Content-Type: application/json" -H "Authorization: Bearer $(cat ./.drive_token)" -d '{"name":"opportunities'-"$(date +%s)"'.zip"}' | tr -d '\r' | sed -En 's/^x-guploader-uploadid: (.*)/\1/p' | tee ./.fileid 
+curl -sD - -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet" -H "Content-Type: application/json" -H "Authorization: Bearer $(cat ./.drive_token)" -d '{"name":"opportunities.zip"}' | tr -d '\r' | sed -En 's/^x-guploader-uploadid: (.*)/\1/p' | tee ./.fileid 
 # put file
 curl -Lv -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet&upload_id=$(cat ./.fileid)" -H "Authorization: Bearer $(cat ./.drive_token)" -H "Content-type: application/zip" --data-binary @opportunities.zip
 
