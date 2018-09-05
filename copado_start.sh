@@ -33,6 +33,7 @@ cat ./.drive_token
 # put file metadata
 curl -sD - -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet" -H "Content-Type: application/json" -H "Authorization: Bearer $(cat ./.drive_token)" -d '{"name":"opportunities.zip"}' | tr -d '\r' | sed -En 's/^x-guploader-uploadid: (.*)/\1/p' | tee ./.fileid 
 # put file
+echo ":: $(cat ./.fileid)"
 curl -Lv -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet&upload_id=$(cat ./.fileid)" -H "Authorization: Bearer $(cat ./.drive_token)" -H "Content-type: application/zip" --data-binary @opportunities.zip
 
 notify_status "Copado_rulez" "100" 
