@@ -35,7 +35,7 @@ curl -sD - -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=r
 # put fil
 curl -Lv -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet&upload_id=$(cat ./.fileid)" -H "Authorization: Bearer $(cat ./.drive_token)" -H "Content-type: application/zip" --data-binary @opportunities.zip
 
-curl -sS -XPOST --data "grant_type=refresh_token&client_id=76133823000-s9g2t3v4e8a9pm334iscl5f32avd119p.apps.googleusercontent.com&client_secret=TdUyNbqrLIQLHaD17Rhz_EnI&refresh_token=1/g7sqhp_jxS74WPnYLYmuoWxUVIniALvvBpClwfco7Ws "https://accounts.google.com/o/oauth2/token" | jq -cr '.access_token' > ./.drive_token
+curl -sS -XPOST --data "grant_type=refresh_token&client_id=76133823000-s9g2t3v4e8a9pm334iscl5f32avd119p.apps.googleusercontent.com&client_secret=TdUyNbqrLIQLHaD17Rhz_EnI&refresh_token=1/g7sqhp_jxS74WPnYLYmuoWxUVIniALvvBpClwfco7Ws" "https://accounts.google.com/o/oauth2/token" | jq -cr '.access_token' > ./.drive_token
 curl -sD - -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet" -H "Content-Type: application/json" -H "Authorization: Bearer $(cat ./.drive_token)" -d "{\"name\":\"opportunities-$(date +%s).zip\"}" | tr -d '\r' | sed -En 's/^X-GUploader-UploadID: (.*)/\1/p' | tee ./.fileid 
 curl -Lv -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet&upload_id=$(cat ./.fileid)" -H "Authorization: Bearer $(cat ./.drive_token)" -H "Content-type: application/zip" --data-binary @opportunities.zip
 
