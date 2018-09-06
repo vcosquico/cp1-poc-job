@@ -7,7 +7,7 @@ notify_status "Retrieving_data" "20"
 echo "Retrieving data"
 curl -sS "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+id,+name,+StageName+from+opportunity+WHERE+StageName+=+'Closed+Won'" \
 -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' \
-| jq -c -r '.records[] | [.Name, .StageName] | @csv' > opportunities.csv
+| jq -c -r '.records[] | [.Id .Name, .StageName] | @csv' > opportunities.csv
 sleep 2s
 
 notify_status "Compressing_data" "40"
