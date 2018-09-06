@@ -5,7 +5,10 @@ printenv
 
 notify_status "Retrieving_data" "20" 
 echo "Retrieving data"
-curl -sS "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+Id,+Name,+StageName,+AccountId,+Account.Name,+(select+Id,+Pricebookentry.product2.name+from+OpportunityLineItems)from+opportunity+WHERE+StageName+=+'Closed+Won'" -H 'Authorization: Bearer '"00D1t000000Eo4i\!ARAAQA4pmlYw7JbYsCpCrpXDawSh3jYhKQiDSvpymD608erGUeo15cIYv7CY2pGUdt5RTEdMrngDzwb3T6UY.SXaiF4tFwG8"'' | jq -c -r '["OpportunityId","OpportunityName","StageName","AccountId","AccountName","ProductId","ProductName"], (.records[] | [.Id, .Name, .StageName, .AccountId, .Account.Name, .OpportunityLineItems.records[0].Id, .OpportunityLineItems.records[0].PricebookEntry.Product2.Name ]) | @csv' > opportunities.csv
+curl -sS "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+Id,+Name,+StageName,+AccountId,+Account.Name,+(select+Id,+Pricebookentry.product2.name+from+OpportunityLineItems)from+opportunity+WHERE+StageName+=+'Closed+Won'" \
+-H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' \
+| jq -c -r '["OpportunityId","OpportunityName","StageName","AccountId","AccountName","ProductId","ProductName"], (.records[] | [.Id, .Name, .StageName, .AccountId, .Account.Name, .OpportunityLineItems.records[0].Id, .OpportunityLineItems.records[0].PricebookEntry.Product2.Name ]) | @csv' > opportunities.csv
+
 sleep 2s
 
 notify_status "Compressing_data" "40"
