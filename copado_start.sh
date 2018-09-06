@@ -5,7 +5,7 @@ printenv
 
 notify_status "Retrieving_data" "20" 
 echo "Retrieving data"
-curl -sS "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+name,+StageName+from+opportunity" \
+curl -sS "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+id,+name,+StageName+from+opportunity+WHERE+StageName+=+'Closed+Won'" \
 -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' \
 | jq -c -r '.records[] | [.Name, .StageName] | @csv' > opportunities.csv
 sleep 2s
@@ -28,7 +28,6 @@ sleep 2s
 notify_status "Uploading_data_to_Google_Drive" "80" 
 echo "Uploading GDrive data"
 # get access token
-# curl -sS -XPOST --data 'grant_type=refresh_token&client_id=864421843858-g6b3ngvrpg8p9j2kt03rv0l0h0kteuhn.apps.googleusercontent.com&client_secret=pUvKreCL4nLnYAaj_xmGyGa9&refresh_token=1/24qD4kf0lU-91tfazVp161zPCDkrwtX5PrQD4jh0q4tWM7WCt5xWfSfTcLTfYUnX' "https://accounts.google.com/o/oauth2/token" | jq -cr '.access_token' > ./.drive_token
 curl -sS -XPOST --data "grant_type=refresh_token&client_id=$GDRIVE_CLIENT_ID&client_secret=$GDRIVE_SECRET&refresh_token=$GDRIVE_TOKEN" "https://accounts.google.com/o/oauth2/token" | jq -cr '.access_token' > ./.drive_token
 # put file metadata
 curl -sD - -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet" -H "Content-Type: application/json" -H "Authorization: Bearer $(cat ./.drive_token)" -d "{\"name\":\"opportunities-$(date +%s).zip\"}" | tr -d '\r' | sed -En 's/^X-GUploader-UploadID: (.*)/\1/p' | tee ./.fileid 
