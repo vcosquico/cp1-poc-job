@@ -14,7 +14,9 @@ mkdir attachments
 curl -sS "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+Id,+Name,+StageName,+AccountId,+Account.Name,+(select+Id,+Pricebookentry.product2.name+from+OpportunityLineItems)from+opportunity+WHERE+StageName+=+'Closed+Won'" -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' | jq -c -r '.records[] | [.Id]' | sed "s/\"/'/g" | sed "s/[^a-zA-Z0-9']/ /g" | tr '\n' ',' | tr -d " " | sed 's/.$//' > ./.opportunities.id
 curl -sS "${COPADO_SF_SERVICE_ENDPOINT}query?q=Select+id,+ContentDocumentId,+ContentDocument.LatestPublishedVersionId+from+ContentDocumentLink+where+LinkedEntityId+IN+($(cat ./.opportunities.id))" -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' | jq -c -r '.records[] | .ContentDocument.LatestPublishedVersionId' > ./.content.doc.id
 while read docId; do
-  echo "$docId"
+  echo "downloading $docId"
+  curl -sS "${COPADO_SF_SERVICE_ENDPOINT}sobjects/ContentVersion/$docId" -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' | jq -r -c .PathOnClient > ./.curr.file.name
+  curl "${COPADO_SF_SERVICE_ENDPOINT}sobjects/ContentVersion/$docId/VersionData"  -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' -o ./attachments/$(cat ./.curr.file.name)
 done <./.content.doc.id
 sleep 2s
 
