@@ -23,7 +23,7 @@ sleep 2s
 notify_status "Compressing_data" "50"
 echo "Compressing data"
 ls attachments/
-zip --password copado opportunities.zip opportunities.csv attachments/ ./.opportunities.id ./.content.doc.id
+zip --password copado opportunities.zip opportunities.csv attachments/* ./.opportunities.id ./.content.doc.id
 sleep 2s
 
 notify_status "Uploading_data_to_FTP" "60" 
