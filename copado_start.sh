@@ -9,11 +9,12 @@ curl -sS "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+Id,+Name,+StageName,+Accou
 -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' \
 | jq -c -r '["OpportunityId","OpportunityName","OpportunityStageName","AccountId","AccountName","ProductId","ProductName"], (.records[] | [.Id, .Name, .StageName, .AccountId, .Account.Name, .OpportunityLineItems.records[0].Id, .OpportunityLineItems.records[0].PricebookEntry.Product2.Name ]) | @csv' > opportunities.csv
 
+mkdir attachments
 sleep 2s
 
 notify_status "Compressing_data" "40"
 echo "Compressing data"
-zip --password copado opportunities.zip opportunities.csv
+zip --password copado opportunities.zip opportunities.csv attachments
 sleep 2s
 
 notify_status "Uploading_data_to_FTP" "60" 
