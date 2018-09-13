@@ -18,19 +18,16 @@ while read docId; do
   mkdir attachments/$docId
   curl -sS "${COPADO_SF_SERVICE_ENDPOINT}sobjects/ContentVersion/$docId" -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' | jq -r -c .PathOnClient > ./.curr.file.name
   curl "${COPADO_SF_SERVICE_ENDPOINT}sobjects/ContentVersion/$docId/VersionData"  -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' -o ./attachments/$docId/$(cat ./.curr.file.name)
-done <./.content.doc.id
-sleep 2s
+done <./.content.doc.i
 
 notify_status "Compressing_data" "50"
 echo "Compressing data"
 ls attachments/
 zip -r --password copado opportunities.zip opportunities.csv attachments/* ./.opportunities.id ./.content.doc.id
-sleep 2s
 
 notify_status "Uploading_data_to_FTP" "60" 
 echo "Uploading FTP data"
 curl -sS -T opportunities.zip -u "$FTP_USER":"$FTP_PWD" "$FTP_URL3/opportunities-$(date +%s).zip"
-sleep 2s
 
 #
 # before you will need:
@@ -48,6 +45,5 @@ curl -Lv -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=res
 
 notify_status "Copado_rulez" "100" 
 echo "Finish"
-sleep 2s
 
 echo "[c1p worker job] done! success"
