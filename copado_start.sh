@@ -19,7 +19,7 @@ while read docId; do
   echo "downloading $docId"
   mkdir attachments/$docId
   curl -sS "${COPADO_SF_SERVICE_ENDPOINT}sobjects/ContentVersion/$docId" -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' | jq -r -c .PathOnClient > ./.curr.file.name
-  curl "${COPADO_SF_SERVICE_ENDPOINT}sobjects/ContentVersion/$docId/VersionData"  -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' -o ./attachments/$docId/$(cat ./.curr.file.name)
+  curl "${COPADO_SF_SERVICE_ENDPOINT}sobjects/ContentVersion/$docId/VersionData"  -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' -o "./attachments/$docId/$(cat ./.curr.file.name)"
 done <./.content.doc.id
 
 notify_status "Compressing_data" "50"
