@@ -41,11 +41,14 @@ curl -sS -T opportunities.zip -u "$FTP_USER":"$FTP_PWD" "$FTP_URL3/opportunities
 notify_status "Uploading_data_to_Google_Drive" "80" 
 echo "Uploading GDrive data"
 # get access token
+echo "Getting GDrive access token"
 curl -sS -XPOST --data "grant_type=refresh_token&client_id=$GDRIVE_CLIENT_ID&client_secret=$GDRIVE_SECRET&refresh_token=$GDRIVE_TOKEN" "https://accounts.google.com/o/oauth2/token" | jq -cr '.access_token' > ./.drive_token
 # put file metadata
-curl -sD - -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet" -H "Content-Type: application/json" -H "Authorization: Bearer $(cat ./.drive_token)" -d "{\"name\":\"opportunities-$(date +%s).zip\"}" | tr -d '\r' | sed -En 's/^X-GUploader-UploadID: (.*)/\1/p' | tee ./.fileid 
+echo "Uploading GDrive file metadata"
+curl -sD - -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet" -H "Content-Type: application/json" -H "Authorization: Bearer $(cat ./.drive_token)" -d "{\"name\":\"opportunities-$(date +%s).zip\"}" | tr -d '\r' | sed -En 's/^X-GUploader-UploadID: (.*)/\1/p' > ./.fileid 
 # put fil
-curl -sLv -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet&upload_id=$(cat ./.fileid)" -H "Authorization: Bearer $(cat ./.drive_token)" -H "Content-type: application/zip" --data-binary @opportunities.zip
+echo "Uploading GDrive file"
+curl -sL -XPOST "https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&part=snippet&upload_id=$(cat ./.fileid)" -H "Authorization: Bearer $(cat ./.drive_token)" -H "Content-type: application/zip" --data-binary @opportunities.zip
 
 notify_status "Copado_rulez" "100" 
 echo "Finish"
