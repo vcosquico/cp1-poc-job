@@ -2,12 +2,14 @@
 
 echo "[c1p document job] invoked copado job"
 
+CSV_FILE_NAME=${FILE_NAME:-opportunities.csv}
+
 notify_status "Retrieving_data" "20" 
 echo "[c1p document job] Retrieving data"
 # get all the closed-won opportunities
 curl -sS "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+Id,+Name,+StageName,+AccountId,+Account.Name,+(select+Id,+Pricebookentry.product2.name+from+OpportunityLineItems)from+opportunity+WHERE+StageName+=+'Closed+Won'" \
 -H 'Authorization: Bearer '"$COPADO_SF_AUTH_HEADER"'' \
-| jq -c -r '["OpportunityId","OpportunityName","OpportunityStageName","AccountId","AccountName","ProductId","ProductName"], (.records[] | [.Id, .Name, .StageName, .AccountId, .Account.Name, .OpportunityLineItems.records[0].Id, .OpportunityLineItems.records[0].PricebookEntry.Product2.Name ]) | @csv' > opportunities.csv
+| jq -c -r '["OpportunityId","OpportunityName","OpportunityStageName","AccountId","AccountName","ProductId","ProductName"], (.records[] | [.Id, .Name, .StageName, .AccountId, .Account.Name, .OpportunityLineItems.records[0].Id, .OpportunityLineItems.records[0].PricebookEntry.Product2.Name ]) | @csv' > $CSV_FILE_NAME
 
 notify_status "Retrieving_attachments" "40"
 # download all attachment files for the opportunities
@@ -25,7 +27,7 @@ done <./.content.doc.id
 notify_status "Compressing_data" "50"
 echo "[c1p document job] Compressing data"
 # zip all the attachments and the opportinities csv
-zip -qr --password copado opportunities.zip opportunities.csv attachments/* ./.opportunities.id ./.content.doc.id
+zip -qr --password copado opportunities.zip $CSV_FILE_NAME attachments/* ./.opportunities.id ./.content.doc.id
 
 notify_status "Uploading_data_to_FTP" "60" 
 echo "[c1p document job] Uploading FTP data"
