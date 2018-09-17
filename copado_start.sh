@@ -25,7 +25,6 @@ done <./.content.doc.id
 notify_status "Compressing_data" "50"
 echo "[c1p document job] Compressing data"
 # zip all the attachments and the opportinities csv
-ls attachments/
 zip -qr --password copado opportunities.zip opportunities.csv attachments/* ./.opportunities.id ./.content.doc.id
 
 notify_status "Uploading_data_to_FTP" "60" 
