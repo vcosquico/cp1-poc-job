@@ -4,7 +4,7 @@ echo "[c1p document job] invoked copado job"
 
 CSV_FILE_NAME=${FILE_NAME:-opportunities.csv}
 
-notify_status "Retrieving_data" "20" 
+notify_status "Retrieving data from Salesforce" "20" 
 echo "[c1p document job] Retrieving data"
 # get all the closed-won opportunities
 curl -sS "${COPADO_SF_SERVICE_ENDPOINT}query?q=SELECT+Id,+Name,+StageName,+AccountId,+Account.Name,+(select+Id,+Pricebookentry.product2.name+from+OpportunityLineItems)from+opportunity+WHERE+StageName+=+'Closed+Won'" \
